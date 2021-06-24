@@ -8,3 +8,5 @@ spring:
         namespace: 6f9b4a72-6aea-47e6-9806-f23f23a65f4b
         group: dev
         file-extension: yml
+      discovery:
+        ip: localhost
