@@ -1,8 +1,22 @@
 package com.atguigu.gmall.pms.service.impl;
 
+import com.atguigu.gmall.pms.entity.*;
+import com.atguigu.gmall.pms.feign.GmallSmsClient;
+import com.atguigu.gmall.pms.mapper.SkuMapper;
+import com.atguigu.gmall.pms.mapper.SpuDescMapper;
+import com.atguigu.gmall.pms.service.*;
+import com.atguigu.gmall.pms.vo.SkuVo;
+import com.atguigu.gmall.pms.vo.SpuAttrValueVo;
+import com.atguigu.gmall.pms.vo.SpuVo;
+import com.atguigu.gmall.sms.vo.SkuSaleVo;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-import java.util.Map;
+
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -10,13 +24,25 @@ import com.atguigu.gmall.common.bean.PageResultVo;
 import com.atguigu.gmall.common.bean.PageParamVo;
 
 import com.atguigu.gmall.pms.mapper.SpuMapper;
-import com.atguigu.gmall.pms.entity.SpuEntity;
-import com.atguigu.gmall.pms.service.SpuService;
+import org.springframework.util.CollectionUtils;
+
+import javax.annotation.Resource;
 
 
 @Service("spuService")
 public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements SpuService {
-
+    @Resource
+    private SpuDescMapper spuDescMapper;
+    @Resource
+    private SpuAttrValueService spuAttrValueService;
+    @Resource
+    private SkuMapper skuMapper;
+    @Resource
+    private SkuImagesService skuImagesService;
+    @Resource
+    private SkuAttrValueService skuAttrValueService;
+    @Resource
+    private GmallSmsClient smsClient;
     @Override
     public PageResultVo queryPage(PageParamVo paramVo) {
         IPage<SpuEntity> page = this.page(
@@ -55,4 +81,79 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
         return new PageResultVo(page);
     }
 
+    @Override
+    public void bigSave(SpuVo spu) {
+
+        //1.保存spu相关的3张表
+        //1.1保存pms_spu
+        spu.setCreateTime(new Date());
+        spu.setUpdateTime(spu.getCreateTime());
+        this.save(spu);
+        Long spuId = spu.getId();
+        //1.2保存pms_spu_desc
+        List<String> spuImages = spu.getSpuImages();
+        if (!CollectionUtils.isEmpty(spuImages)) {
+            SpuDescEntity spuDescEntity = new SpuDescEntity();
+            spuDescEntity.setSpuId(spuId);
+            spuDescEntity.setDecript(StringUtils.join(spuImages, ","));
+            this.spuDescMapper.insert(spuDescEntity);
+        }
+        //1.3保存pms_spu_attr_value
+        List<SpuAttrValueVo> baseAttrs = spu.getBaseAttrs();
+        if (!CollectionUtils.isEmpty(baseAttrs)) {
+            //把SpuAttrValueVo集合转为SpuAttrValueEntity集合
+            List<SpuAttrValueEntity> spuAttrValueEntities = baseAttrs.stream().filter(spuAttrValueVo ->
+                spuAttrValueVo.getAttrValue() != null
+            ).map(spuAttrValueVo -> {
+                SpuAttrValueEntity spuAttrValueEntity = new SpuAttrValueEntity();
+                BeanUtils.copyProperties(spuAttrValueVo, spuAttrValueEntity);
+                spuAttrValueEntity.setSpuId(spuId);
+                return spuAttrValueEntity;
+            }).collect(Collectors.toList());
+            this.spuAttrValueService.saveBatch(spuAttrValueEntities);
+        }
+        //2.保存sku相关的3张表
+        List<SkuVo> skus = spu.getSkus();
+        if (CollectionUtils.isEmpty(skus)) {
+            return;
+        }
+        skus.forEach(skuVo -> {
+            //2.1保存pms_sku
+            skuVo.setSpuId(spuId);
+            skuVo.setCategoryId(spu.getCategoryId());
+            skuVo.setBrandId(spu.getBrandId());
+            //  获取页面的图片列表
+            List<String> images = skuVo.getImages();
+            if (!CollectionUtils.isEmpty(images)) {
+                //  把第一张作为默认图片
+                skuVo.setDefaultImage(StringUtils.isBlank(skuVo.getDefaultImage())?images.get(0):skuVo.getDefaultImage());
+            }
+            this.skuMapper.insert(skuVo);
+            Long skuId = skuVo.getId();
+            //2.2保存pms_sku_images
+            if (!CollectionUtils.isEmpty(images)) {
+                this.skuImagesService.saveBatch(images.stream().map(image -> {
+                    SkuImagesEntity skuImagesEntity = new SkuImagesEntity();
+                    skuImagesEntity.setSkuId(skuId);
+                    skuImagesEntity.setUrl(image);
+                    //如果当前图片的地址和sku的默认图片地址相同，则设置为1，否则为0
+                    skuImagesEntity.setDefaultStatus(StringUtils.equals(skuVo.getDefaultImage(), image) ? 1 : 0);
+                    return skuImagesEntity;
+                }).collect(Collectors.toList()));
+            }
+            //2.3保存pms_sku_attr_value
+            List<SkuAttrValueEntity> saleAttrs = skuVo.getSaleAttrs();
+            if (!CollectionUtils.isEmpty(saleAttrs)) {
+                saleAttrs.forEach(skuAttrValueEntity -> {
+                    skuAttrValueEntity.setSkuId(skuId);
+                });
+                this.skuAttrValueService.saveBatch(saleAttrs);
+            }
+            //3.保存营销信息相关的3张表
+            SkuSaleVo skuSaleVo = new SkuSaleVo();
+            BeanUtils.copyProperties(skuVo, skuSaleVo);
+            skuSaleVo.setSkuId(skuId);
+            this.smsClient.saleSales(skuSaleVo);
+        });
+    }
 }
