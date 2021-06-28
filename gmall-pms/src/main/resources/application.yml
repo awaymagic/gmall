@@ -9,6 +9,9 @@ spring:
       transport:
         dashboard: localhost:8080
         port: 8719
+    alibaba:
+      seata:
+        tx-service-group: tx-gmall-group
   zipkin:
     base-url: http://localhost:9411
     discovery-client-enabled: true
@@ -39,3 +42,7 @@ logging:
     com.atguigu.gmall: debug
 ali:
   oss:
+    accessId: LTAI5t64abCttwZ6ih5KrSj7
+    accessKey: HAKkbmweL5SbCCA6zMOaFT8SAofHyd
+    endpoint: oss-cn-beijing.aliyuncs.com
+    bucket: away-gmall

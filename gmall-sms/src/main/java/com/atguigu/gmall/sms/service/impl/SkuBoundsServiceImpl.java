@@ -19,6 +19,8 @@ import com.atguigu.gmall.common.bean.PageParamVo;
 import com.atguigu.gmall.sms.mapper.SkuBoundsMapper;
 import com.atguigu.gmall.sms.entity.SkuBoundsEntity;
 import com.atguigu.gmall.sms.service.SkuBoundsService;
+
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
@@ -40,9 +42,10 @@ public class SkuBoundsServiceImpl extends ServiceImpl<SkuBoundsMapper, SkuBounds
         return new PageResultVo(page);
     }
 
+    @Transactional
     @Override
     public void saleSales(SkuSaleVo saleVo) {
-        //3.1保存sms_sku_bounds
+        //3.1保存sms_sku_bounds积分优惠
         SkuBoundsEntity skuBoundsEntity = new SkuBoundsEntity();
         BeanUtils.copyProperties(saleVo, skuBoundsEntity);
         List<Integer> work = saleVo.getWork();
@@ -50,12 +53,12 @@ public class SkuBoundsServiceImpl extends ServiceImpl<SkuBoundsMapper, SkuBounds
             skuBoundsEntity.setWork(work.get(3) * 8 + work.get(2) * 4 + work.get(1) * 2 + work.get(0));
         }
         this.save(skuBoundsEntity);
-        //3.2保存sms_sku_full_reduction
+        //3.2保存sms_sku_full_reduction满减
         SkuFullReductionEntity skuFullReductionEntity = new SkuFullReductionEntity();
         BeanUtils.copyProperties(saleVo, skuFullReductionEntity);
         skuFullReductionEntity.setAddOther(saleVo.getFullAddOther());
         this.reductionMapper.insert(skuFullReductionEntity);
-        //3.3保存sms_sku_ladder
+        //3.3保存sms_sku_ladder打折
         SkuLadderEntity ladderEntity = new SkuLadderEntity();
         BeanUtils.copyProperties(saleVo, ladderEntity);
         ladderEntity.setAddOther(saleVo.getLadderAddOther());
