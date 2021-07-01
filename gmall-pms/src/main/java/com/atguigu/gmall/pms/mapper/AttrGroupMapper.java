@@ -6,12 +6,12 @@ import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 属性分组
- * 
+ *
  * @author away
  * @email awaymagic@gmail.com
  * @date 2021-06-22 18:54:21
  */
 @Mapper
 public interface AttrGroupMapper extends BaseMapper<AttrGroupEntity> {
-	
+
 }

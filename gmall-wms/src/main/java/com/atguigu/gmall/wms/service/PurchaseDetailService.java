@@ -8,8 +8,6 @@ import com.atguigu.gmall.wms.entity.PurchaseDetailEntity;
 import java.util.Map;
 
 /**
- * 
- *
  * @author away
  * @email awaymagic@gmail.com
  * @date 2021-06-23 21:02:20

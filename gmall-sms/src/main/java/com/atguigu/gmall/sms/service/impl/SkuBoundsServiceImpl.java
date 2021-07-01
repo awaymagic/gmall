@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -33,6 +34,7 @@ public class SkuBoundsServiceImpl extends ServiceImpl<SkuBoundsMapper, SkuBounds
     private SkuFullReductionMapper reductionMapper;
     @Resource
     private SkuLadderMapper skuLadderMapper;
+
     @Override
     public PageResultVo queryPage(PageParamVo paramVo) {
         IPage<SkuBoundsEntity> page = this.page(

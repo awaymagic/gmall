@@ -27,6 +27,7 @@ import java.util.Map;
 public class OssController {
     @Autowired
     private AliyunOssProperties aliyunOssProperties;
+
     @GetMapping("policy")
     public ResponseVo<Object> policy() {
         String accessId = aliyunOssProperties.getAccessId(); // 请填写您的AccessKeyId。

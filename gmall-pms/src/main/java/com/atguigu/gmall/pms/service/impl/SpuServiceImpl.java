@@ -44,6 +44,7 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
     private SkuAttrValueService skuAttrValueService;
     @Resource
     private GmallSmsClient smsClient;
+
     @Override
     public PageResultVo queryPage(PageParamVo paramVo) {
         IPage<SpuEntity> page = this.page(
@@ -114,7 +115,7 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
             List<String> images = skuVo.getImages();
             if (!CollectionUtils.isEmpty(images)) {
                 //  把第一张作为默认图片
-                skuVo.setDefaultImage(StringUtils.isBlank(skuVo.getDefaultImage())?images.get(0):skuVo.getDefaultImage());
+                skuVo.setDefaultImage(StringUtils.isBlank(skuVo.getDefaultImage()) ? images.get(0) : skuVo.getDefaultImage());
             }
             this.skuMapper.insert(skuVo);
             Long skuId = skuVo.getId();
@@ -150,7 +151,7 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
         if (!CollectionUtils.isEmpty(baseAttrs)) {
             //把SpuAttrValueVo集合转为SpuAttrValueEntity集合
             List<SpuAttrValueEntity> spuAttrValueEntities = baseAttrs.stream().filter(spuAttrValueVo ->
-                spuAttrValueVo.getAttrValue() != null
+                    spuAttrValueVo.getAttrValue() != null
             ).map(spuAttrValueVo -> {
                 SpuAttrValueEntity spuAttrValueEntity = new SpuAttrValueEntity();
                 BeanUtils.copyProperties(spuAttrValueVo, spuAttrValueEntity);
@@ -160,7 +161,6 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
             this.spuAttrValueService.saveBatch(spuAttrValueEntities);
         }
     }
-
 
 
     private Long saveSpuInfo(SpuVo spu) {

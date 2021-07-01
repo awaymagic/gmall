@@ -6,12 +6,12 @@ import org.apache.ibatis.annotations.Mapper;
 
 /**
  * spu属性值
- * 
+ *
  * @author away
  * @email awaymagic@gmail.com
  * @date 2021-06-22 18:54:21
  */
 @Mapper
 public interface SpuAttrValueMapper extends BaseMapper<SpuAttrValueEntity> {
-	
+
 }

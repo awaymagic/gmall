@@ -6,12 +6,12 @@ import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 品牌
- * 
+ *
  * @author away
  * @email awaymagic@gmail.com
  * @date 2021-06-22 18:54:21
  */
 @Mapper
 public interface BrandMapper extends BaseMapper<BrandEntity> {
-	
+
 }

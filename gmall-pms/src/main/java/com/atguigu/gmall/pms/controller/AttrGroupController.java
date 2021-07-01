@@ -54,7 +54,7 @@ public class AttrGroupController {
      */
     @GetMapping
     @ApiOperation("分页查询")
-    public ResponseVo<PageResultVo> queryAttrGroupByPage(PageParamVo paramVo){
+    public ResponseVo<PageResultVo> queryAttrGroupByPage(PageParamVo paramVo) {
         PageResultVo pageResultVo = attrGroupService.queryPage(paramVo);
 
         return ResponseVo.ok(pageResultVo);
@@ -66,8 +66,8 @@ public class AttrGroupController {
      */
     @GetMapping("{id}")
     @ApiOperation("详情查询")
-    public ResponseVo<AttrGroupEntity> queryAttrGroupById(@PathVariable("id") Long id){
-		AttrGroupEntity attrGroup = attrGroupService.getById(id);
+    public ResponseVo<AttrGroupEntity> queryAttrGroupById(@PathVariable("id") Long id) {
+        AttrGroupEntity attrGroup = attrGroupService.getById(id);
 
         return ResponseVo.ok(attrGroup);
     }
@@ -77,8 +77,8 @@ public class AttrGroupController {
      */
     @PostMapping
     @ApiOperation("保存")
-    public ResponseVo<Object> save(@RequestBody AttrGroupEntity attrGroup){
-		attrGroupService.save(attrGroup);
+    public ResponseVo<Object> save(@RequestBody AttrGroupEntity attrGroup) {
+        attrGroupService.save(attrGroup);
 
         return ResponseVo.ok();
     }
@@ -88,8 +88,8 @@ public class AttrGroupController {
      */
     @PostMapping("/update")
     @ApiOperation("修改")
-    public ResponseVo update(@RequestBody AttrGroupEntity attrGroup){
-		attrGroupService.updateById(attrGroup);
+    public ResponseVo update(@RequestBody AttrGroupEntity attrGroup) {
+        attrGroupService.updateById(attrGroup);
 
         return ResponseVo.ok();
     }
@@ -99,8 +99,8 @@ public class AttrGroupController {
      */
     @PostMapping("/delete")
     @ApiOperation("删除")
-    public ResponseVo delete(@RequestBody List<Long> ids){
-		attrGroupService.removeByIds(ids);
+    public ResponseVo delete(@RequestBody List<Long> ids) {
+        attrGroupService.removeByIds(ids);
 
         return ResponseVo.ok();
     }

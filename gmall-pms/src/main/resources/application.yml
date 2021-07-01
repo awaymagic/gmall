@@ -42,7 +42,3 @@ logging:
     com.atguigu.gmall: debug
 ali:
   oss:
-    accessId: LTAI5t64abCttwZ6ih5KrSj7
-    accessKey: HAKkbmweL5SbCCA6zMOaFT8SAofHyd
-    endpoint: oss-cn-beijing.aliyuncs.com
-    bucket: away-gmall

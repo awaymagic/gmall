@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -26,6 +27,7 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupMapper, AttrGroup
 
     @Resource
     private AttrMapper attrMapper;
+
     @Override
     public PageResultVo queryPage(PageParamVo paramVo) {
         IPage<AttrGroupEntity> page = this.page(
@@ -40,7 +42,7 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupMapper, AttrGroup
     public List<AttrGroupEntity> queryGroupsWithAttrsByCid(Long catId) {
         // 先根据分类id查询组列表
         List<AttrGroupEntity> groupEntities = this.list(new QueryWrapper<AttrGroupEntity>().eq("category_id", catId));
-        if (CollectionUtils.isEmpty(groupEntities)){
+        if (CollectionUtils.isEmpty(groupEntities)) {
             return null;
         }
 

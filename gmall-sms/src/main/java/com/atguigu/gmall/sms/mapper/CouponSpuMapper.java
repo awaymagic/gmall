@@ -6,12 +6,12 @@ import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 优惠券与产品关联
- * 
+ *
  * @author away
  * @email awaymagic@gmail.com
  * @date 2021-06-22 19:29:48
  */
 @Mapper
 public interface CouponSpuMapper extends BaseMapper<CouponSpuEntity> {
-	
+
 }

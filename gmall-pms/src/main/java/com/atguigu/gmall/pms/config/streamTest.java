@@ -53,6 +53,7 @@ public class streamTest {
         System.out.println(users.stream().map(User::getAge).reduce((a, b) -> a + b).get());
     }
 }
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
