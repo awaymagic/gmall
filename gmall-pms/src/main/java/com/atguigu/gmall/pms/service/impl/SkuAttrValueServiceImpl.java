@@ -47,7 +47,7 @@ public class SkuAttrValueServiceImpl extends ServiceImpl<SkuAttrValueMapper, Sku
 
 //        2查询检索类型的规格参数和值
         List<Long> attrIds = attrEntities.stream().map(AttrEntity::getId).collect(Collectors.toList());
-        return this.list(new QueryWrapper<SkuAttrValueEntity>().eq("sku_id", skuId).eq("attr_id", attrIds));
+        return this.list(new QueryWrapper<SkuAttrValueEntity>().eq("sku_id", skuId).in("attr_id", attrIds));
 
 
     }

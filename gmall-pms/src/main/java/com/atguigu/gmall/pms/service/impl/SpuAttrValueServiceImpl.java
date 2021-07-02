@@ -48,7 +48,7 @@ public class SpuAttrValueServiceImpl extends ServiceImpl<SpuAttrValueMapper, Spu
 
 //        2查询检索类型的规格参数和值
         List<Long> attrIds = attrEntities.stream().map(AttrEntity::getId).collect(Collectors.toList());
-        return this.list(new QueryWrapper<SpuAttrValueEntity>().eq("spu_id", spuId).eq("attr_id", attrIds));
+        return this.list(new QueryWrapper<SpuAttrValueEntity>().eq("spu_id", spuId).in("attr_id", attrIds));
 
     }
 
