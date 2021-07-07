@@ -11,6 +11,7 @@ import com.atguigu.gmall.pms.vo.SpuVo;
 import com.atguigu.gmall.sms.vo.SkuSaleVo;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +45,9 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
     private SkuAttrValueService skuAttrValueService;
     @Resource
     private GmallSmsClient smsClient;
+    @Resource
+    private RabbitTemplate rabbitTemplate;
+
 
     @Override
     public PageResultVo queryPage(PageParamVo paramVo) {
@@ -99,6 +103,8 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
         saveBaseAttrs(spu, spuId);
         //2.保存sku相关的3张表
         saveSkuInfo(spu, spuId);
+
+        this.rabbitTemplate.convertAndSend("PMS_ITEM_EXCHANGE", "item.insert", spuId);
     }
 
     private void saveSkuInfo(SpuVo spu, Long spuId) {

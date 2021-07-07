@@ -29,7 +29,4 @@ mvnw*
 hs_err_pid*
 .DS_Store
 .idea/
-gmall-admin/
-gmall-common/
 gmall.iml
-pom.xml

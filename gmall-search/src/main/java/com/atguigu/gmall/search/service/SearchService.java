@@ -55,7 +55,7 @@ public class SearchService {
         try {
             SearchResponse response = this.restHighLevelClient.search(new SearchRequest(new String[]{"goods"}, builderDsl(paramVo)), RequestOptions.DEFAULT);
 
-            System.out.println(response);
+           // System.out.println(response);
 
 
             SearchResponseVo responseVo = this.parseResult(response);
@@ -291,7 +291,10 @@ public class SearchService {
                 )
         );
 
-        System.out.println(sourceBuilder);
+        // 6.结果集过滤
+        sourceBuilder.fetchSource(new String[]{"skuId", "title", "subTitle", "price", "defaultImage"}, null);//包含哪些字段，不包含哪些字段
+
+        //System.out.println(sourceBuilder);
         return sourceBuilder;
     }
 }

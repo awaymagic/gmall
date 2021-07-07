@@ -15,9 +15,13 @@ import com.atguigu.gmall.pms.mapper.CategoryMapper;
 import com.atguigu.gmall.pms.entity.CategoryEntity;
 import com.atguigu.gmall.pms.service.CategoryService;
 
+import javax.annotation.Resource;
+
 
 @Service("categoryService")
 public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEntity> implements CategoryService {
+    @Resource
+    private CategoryMapper categoryMapper;
 
     @Override
     public PageResultVo queryPage(PageParamVo paramVo) {
@@ -36,4 +40,10 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
         }
         return this.list(wrapper);
     }
+
+    @Override
+    public List<CategoryEntity> queryLvl2WithSubsByPid(Long pid) {
+        return this.categoryMapper.queryLvl2WithSubsByPid(pid);
+    }
+
 }

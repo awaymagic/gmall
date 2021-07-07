@@ -26,6 +26,21 @@ spring:
   elasticsearch:
     rest:
       uris: http://172.16.223.3:9200
+  jackson:
+    default-property-inclusion: non_null #jackson序列化时默认不包含null
+  thymeleaf:
+    cache: false
+  rabbitmq:
+    host: 172.16.223.3
+    port: 5672
+    virtual-host: /away
+    username: away
+    password: away
+    listener:
+      simple:
+        concurrency: 6 # 多线程消费，一般取cpu核数
+        prefetch: 1 # 开启公平分发
+        acknowledge-mode: manual # 确认模式  不确认none  自动确认auto  手动确认 manual
 feign:
   sentinel:
     enabled: true

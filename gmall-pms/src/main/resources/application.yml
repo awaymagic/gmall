@@ -28,6 +28,14 @@ spring:
   redis:
     host: 172.16.223.3
     port: 6379
+  rabbitmq:
+    host: 172.16.223.3
+    port: 5672
+    virtual-host: /away
+    username: away
+    password: away
+    publisher-confirm-type: correlated
+    publisher-returns: true
 feign:
   sentinel:
     enabled: true

@@ -19,6 +19,8 @@ public class CorsConfig {
         //允许跨域的域名
         config.addAllowedOrigin("http://manager.gmall.com");
         config.addAllowedOrigin("http://localhost:1024");
+        config.addAllowedOrigin("http://www.gmall.com");
+        config.addAllowedOrigin("http://gmall.com");
         //允许访问的方式
         config.addAllowedMethod("*");
         //允许携带的头信息
