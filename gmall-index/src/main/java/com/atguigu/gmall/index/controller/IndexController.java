@@ -35,4 +35,11 @@ public class IndexController {
         List<CategoryEntity> categoryEntities = this.indexService.queryLvl2WithSubsByPid(pid);
         return ResponseVo.ok(categoryEntities);
     }
+
+    @GetMapping("index/test/lock")
+    @ResponseBody
+    public ResponseVo testLock() {
+        this.indexService.testLock();
+        return ResponseVo.ok();
+    }
 }
