@@ -17,6 +17,8 @@ import java.security.PublicKey;
 public class JwtProperties {
     private String pubFilePath;
     private String cookieName;
+    private String userKey;
+    private Integer expire;
 
     private PublicKey publicKey;
 
